@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Muxi0808 的博客</title>
+    <link>https://muxi0808.github.io</link>
+    <description>记录开发、阅读与折腾的极简博客。</description>
+    <language>zh-CN</language>
+    <atom:link href="https://muxi0808.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>你好，世界</title>
+      <link>https://muxi0808.github.io/posts/hello-world.html</link>
+      <guid isPermaLink="true">https://muxi0808.github.io/posts/hello-world.html</guid>
+      <pubDate>Fri, 09 Oct 2026 16:00:00 GMT</pubDate>
+      <description>这个博客的第一篇文章：为什么我要在 2026 年重新写博客，以及打算在这里放些什么。</description>
+    </item>
+    <item>
+      <title>用 200 行脚本搭一个不要框架的静态博客</title>
+      <link>https://muxi0808.github.io/posts/build-a-static-blog.html</link>
+      <guid isPermaLink="true">https://muxi0808.github.io/posts/build-a-static-blog.html</guid>
+      <pubDate>Mon, 05 Oct 2026 16:00:00 GMT</pubDate>
+      <description>不用 Jekyll、不用 Hexo、不装 npm 依赖。一个 Node 脚本把 Markdown 变成纯静态 HTML，托管到 GitHub Pages 就完事。</description>
+    </item>
+    <item>
+      <title>这个博客支持的 Markdown 写法</title>
+      <link>https://muxi0808.github.io/posts/markdown-writing-guide.html</link>
+      <guid isPermaLink="true">https://muxi0808.github.io/posts/markdown-writing-guide.html</guid>
+      <pubDate>Sun, 27 Sep 2026 16:00:00 GMT</pubDate>
+      <description>一份写给自己看的语法速查——渲染器只支持这些，但每一条都验证过。顺便当成渲染回归测试用。</description>
+    </item>
+  </channel>
+</rss>
