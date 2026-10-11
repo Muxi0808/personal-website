@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关于 · Muxi0808 的博客</title>
+<meta name="description" content="关于 Muxi0808 和这个博客。">
+<meta name="author" content="Muxi0808">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于 · Muxi0808 的博客">
+<meta property="og:description" content="关于 Muxi0808 和这个博客。">
+<meta property="og:site_name" content="Muxi0808 的博客">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Muxi0808 的博客" href="feed.xml">
+<script>
+/* 在样式生效前定好主题，避免深色模式刷新时白屏闪烁 */
+(function () {
+  try {
+    var saved = localStorage.getItem("muxi-theme");
+    var dark = saved
+      ? saved === "dark"
+      : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (dark) document.documentElement.setAttribute("data-theme", "dark");
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="brand-mark">M</span><span>Muxi0808</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="index.html">首页</a>
+      <a href="about.html" aria-current="page">关于</a>
+      <a href="feed.xml">RSS</a>
+      <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+    <header class="post-header">
+      <h1>关于</h1>
+    </header>
+
+    <div class="prose">
+      <p>
+        我是 <strong>Muxi0808</strong>，一名喜欢把东西做出来、也喜欢把事情想明白的开发者。
+        这个站点是我的个人空间，用来沉淀技术笔记、阅读心得和一些没什么用但挺好玩的想法。
+      </p>
+      <p>
+        博客本身刻意做得很轻：没有数据库、没有框架、没有构建产物之外的依赖，
+        文章用 Markdown 写，一个几十行的脚本渲染成纯静态 HTML，直接托管在 GitHub Pages 上。
+      </p>
+    </div>
+
+    <div class="about-grid" style="margin-top: 2.5rem">
+      <section class="about-card">
+        <h2>关注方向</h2>
+        <ul class="skill-list">
+          <li><span>前端工程化与 Web 性能</span><span class="level">常用</span></li>
+          <li><span>Node.js / 全栈开发</span><span class="level">常用</span></li>
+          <li><span>Linux 与开发环境折腾</span><span class="level">熟悉</span></li>
+          <li><span>AI 应用与工具链</span><span class="level">在学</span></li>
+        </ul>
+      </section>
+
+      <section class="about-card">
+        <h2>找到我</h2>
+        <ul class="link-list">
+          <li>GitHub：<a href="https://github.com/Muxi0808" rel="me noopener">@Muxi0808</a></li>
+          <li>邮箱：<a href="mailto:2111564220@qq.com">2111564220@qq.com</a></li>
+          <li>订阅：<a href="feed.xml">RSS / Atom</a></li>
+        </ul>
+      </section>
+
+      <section class="about-card">
+        <h2>关于本站</h2>
+        <ul class="link-list">
+          <li>技术栈：原生 HTML / CSS / JS，无框架</li>
+          <li>写作：Markdown + 零依赖构建脚本</li>
+          <li>托管：GitHub Pages</li>
+          <li>许可：<a href="LICENSE">MIT</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Muxi0808</span>
+    <span>用 Markdown 写作 · 静态托管于 GitHub Pages</span>
+  </div>
+</footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

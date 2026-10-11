@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用 200 行脚本搭一个不要框架的静态博客 · Muxi0808 的博客</title>
+<meta name="description" content="不用 Jekyll、不用 Hexo、不装 npm 依赖。一个 Node 脚本把 Markdown 变成纯静态 HTML，托管到 GitHub Pages 就完事。">
+<meta name="author" content="Muxi0808">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 200 行脚本搭一个不要框架的静态博客 · Muxi0808 的博客">
+<meta property="og:description" content="不用 Jekyll、不用 Hexo、不装 npm 依赖。一个 Node 脚本把 Markdown 变成纯静态 HTML，托管到 GitHub Pages 就完事。">
+<meta property="og:site_name" content="Muxi0808 的博客">
+<meta property="article:published_time" content="2026-10-06T00:00:00+08:00">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Muxi0808 的博客" href="../feed.xml">
+<script>
+/* 在样式生效前定好主题，避免深色模式刷新时白屏闪烁 */
+(function () {
+  try {
+    var saved = localStorage.getItem("muxi-theme");
+    var dark = saved
+      ? saved === "dark"
+      : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (dark) document.documentElement.setAttribute("data-theme", "dark");
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-mark">M</span><span>Muxi0808</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="../index.html">首页</a>
+      <a href="../about.html">关于</a>
+      <a href="../feed.xml">RSS</a>
+      <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+    <article>
+      <header class="post-header">
+        <h1>用 200 行脚本搭一个不要框架的静态博客</h1>
+        <div class="post-meta">
+          <time datetime="2026-10-06T00:00:00+08:00">2026 年 10 月 6 日</time>
+          <span class="dot"></span>
+          <span>3 分钟阅读</span>
+        </div>
+        <div class="tags"><span class="tag">Node.js</span><span class="tag">静态站点</span><span class="tag">工程实践</span></div>
+      </header>
+      <div class="prose">
+<p>我想要的博客系统只需要满足三件事：Markdown 写作、纯静态产物、没有依赖。听起来 Jekyll 或 Hexo 都能搞定，但它们各自带进来一整套需要理解的概念——模板语言、插件生态、构建缓存。对一个个人博客来说，这些成本换不回对应的价值。</p>
+<p>于是我自己写了一个构建脚本。核心逻辑不到 200 行，零依赖。</p>
+<h2>整体结构</h2>
+<p>项目目录大致是这样：</p>
+<pre><code class="language-text">.
+├── content/posts/*.md      # Markdown 原文，唯一需要手写的地方
+├── posts/*.html            # 构建产物：每篇文章一个页面
+├── index.html              # 首页，文章列表由脚本注入
+├── about.html
+├── 404.html
+├── feed.xml                # 构建产物：RSS
+├── assets/css/style.css
+├── assets/js/main.js
+└── scripts/build.mjs       # 全部构建逻辑</code></pre>
+<p>构建流程只有三步，跑 <code>node scripts/build.mjs</code> 就全做完：</p>
+<ol>
+<li>读 <code>content/posts/*.md</code>，解析 front matter，渲染正文</li>
+<li>把最新的文章列表写回 <code>index.html</code> 的标记块</li>
+<li>生成 <code>feed.xml</code></li>
+</ol>
+<h2>front matter 用最土的写法</h2>
+<p>不引 YAML 解析库，因为有依赖就违背了初衷。格式约定得很简单：</p>
+<pre><code class="language-markdown">---
+title: 文章标题
+date: 2026-10-06
+summary: 列表页和 RSS 里显示的摘要。
+tags: [Node.js, 静态站点]
+---
+
+正文从这里开始。</code></pre>
+<p>解析就是逐行找第一个冒号切分，<code>tags</code> 额外按逗号切开。够用，而且出错时一眼能看出问题——这一点比「支持完整 YAML」重要得多。</p>
+<h2>Markdown 渲染的几个取舍</h2>
+<p>自己写渲染器，最容易失控的地方是「想支持全部 CommonMark」。我给自己划了条线：<strong>只支持我自己会写的语法</strong>。</p>
+<p>具体做法是把渲染拆成两层：</p>
+<ul>
+<li><code>renderBlocks()</code> 处理块级：标题、段落、围栏代码、引用、列表、表格、分隔线</li>
+<li><code>renderInline()</code> 处理行内：粗体、斜体、行内代码、链接、图片、删除线</li>
+</ul>
+<p>行内这一层有个容易踩的坑：<strong>必须先处理行内代码，再处理其他规则</strong>。否则 <code>`a * b`</code> 里的星号会被当成斜体标记。我的做法是把代码片段先抽出来换成占位符，等其他规则跑完再替换回去：</p>
+<pre><code class="language-js">function renderInline(text) {
+  const stash = [];
+  const keep = (html) =&gt; `\u0000${stash.push(html) - 1}\u0000`;
+
+  let s = escapeHtml(text);
+  // 行内代码最先处理，避免内部内容被后续规则改写
+  s = s.replace(/`([^`]+)`/g, (_, code) =&gt; keep(`&lt;code&gt;${code}&lt;/code&gt;`));
+  // ……其他规则……
+  return s.replace(/\u0000(\d+)\u0000/g, (_, i) =&gt; stash[Number(i)]);
+}</code></pre>
+<p>用 <code>\u0000</code> 作占位符是因为它不可能出现在正常的 Markdown 文本里，不用担心和正文冲突。</p>
+<h2>中文排版的细节</h2>
+<p>顺手解决了一个中文写作里挺烦的问题：<strong>软换行</strong>。</p>
+<p>英文 Markdown 里，段落内换行会被渲染成空格——因为英文单词之间本来就要空格。但中文不需要，如果我在源文件里为了可读性手动折行：</p>
+<pre><code class="language-text">这是一段很长的中文，
+我把它折成了两行。</code></pre>
+<p>按英文规则渲染就会变成「这是一段很长的中文， 我把它折成了两行。」——中间多出一个空格，中英混排时格外明显。</p>
+<p>所以判断换行处两侧的字符，都是中日韩字符就拼接，否则补空格：</p>
+<pre><code class="language-js">const CJK_RE = /[\u2e80-\u303f\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef]/;
+const needSpace = (a, b) =&gt; !(CJK_RE.test(a.slice(-1)) &amp;&amp; CJK_RE.test(b.charAt(0)));</code></pre>
+<p>顺便也支持了行尾两个空格强制换行（<code>&lt;br&gt;</code>），需要时可以手动断开。</p>
+<h2>首页为什么用标记块而不是整页生成</h2>
+<p><code>index.html</code> 是我手写的，只有文章列表那段交给脚本：</p>
+<pre><code class="language-html">&lt;h2 class="section-title"&gt;全部文章&lt;/h2&gt;
+
+&lt;!-- POSTS:START --&gt;
+&lt;!-- POSTS:END --&gt;</code></pre>
+<p>脚本用正则替换两个标记之间的内容。这样首页的自我介绍、导航、页脚都还能直接改 HTML，不用去动构建脚本，也不用学模板语法。</p>
+<blockquote>
+<p>一个原则：构建脚本只负责我懒得手写、且确实会重复的部分。凡是只出现一次的东西，手写比模板更省事。</p>
+</blockquote>
+<h2>部署</h2>
+<p>产物是纯静态文件，扔哪都能跑。GitHub Pages 的流程：</p>
+<ol>
+<li>推到 GitHub 仓库</li>
+<li>Settings → Pages → Source 选 <code>Deploy from a branch</code></li>
+<li>分支选 <code>main</code>，目录选 <code>/ (root)</code></li>
+<li>等一分钟，访问 <code>https://&lt;用户名&gt;.github.io/&lt;仓库名&gt;/</code></li>
+</ol>
+<p>仓库里那个 <code>.nojekyll</code> 空文件是必须的：GitHub Pages 默认会跑一遍 Jekyll，它会忽略掉下划线开头的文件，也会做多余的构建。放一个 <code>.nojekyll</code> 就让它老老实实按静态文件直接发布。</p>
+<h2>值不值得自己写</h2>
+<p>如果你的需求和我一样——写 Markdown、产出静态页、不想维护——那自己写一个确实划算，一晚上能搞定，之后几年都不用管。</p>
+<p>但如果需要分类、标签页、分页、搜索、多语言，还是老老实实用现成框架。<strong>自己写的边界感很重要：一旦开始加功能，成本曲线会立刻变得比用框架更陡。</strong></p>
+<p>对我来说，这套东西的价值不在于省了多少事，而在于整个链路上每一行我都清楚它在干什么。出问题时不需要去读别人的源码。</p>
+      </div>
+    </article>
+    <div class="post-footer">
+      <a href="../index.html">← 返回首页</a>
+      <span><a href="hello-world.html">← 你好，世界</a> · <a href="markdown-writing-guide.html">这个博客支持的 Markdown 写法 →</a></span>
+    </div>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Muxi0808</span>
+    <span>用 Markdown 写作 · 静态托管于 GitHub Pages</span>
+  </div>
+</footer>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

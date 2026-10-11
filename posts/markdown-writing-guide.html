@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>这个博客支持的 Markdown 写法 · Muxi0808 的博客</title>
+<meta name="description" content="一份写给自己看的语法速查——渲染器只支持这些，但每一条都验证过。顺便当成渲染回归测试用。">
+<meta name="author" content="Muxi0808">
+<meta property="og:type" content="article">
+<meta property="og:title" content="这个博客支持的 Markdown 写法 · Muxi0808 的博客">
+<meta property="og:description" content="一份写给自己看的语法速查——渲染器只支持这些，但每一条都验证过。顺便当成渲染回归测试用。">
+<meta property="og:site_name" content="Muxi0808 的博客">
+<meta property="article:published_time" content="2026-09-28T00:00:00+08:00">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Muxi0808 的博客" href="../feed.xml">
+<script>
+/* 在样式生效前定好主题，避免深色模式刷新时白屏闪烁 */
+(function () {
+  try {
+    var saved = localStorage.getItem("muxi-theme");
+    var dark = saved
+      ? saved === "dark"
+      : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (dark) document.documentElement.setAttribute("data-theme", "dark");
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-mark">M</span><span>Muxi0808</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="../index.html">首页</a>
+      <a href="../about.html">关于</a>
+      <a href="../feed.xml">RSS</a>
+      <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+    <article>
+      <header class="post-header">
+        <h1>这个博客支持的 Markdown 写法</h1>
+        <div class="post-meta">
+          <time datetime="2026-09-28T00:00:00+08:00">2026 年 9 月 28 日</time>
+          <span class="dot"></span>
+          <span>2 分钟阅读</span>
+        </div>
+        <div class="tags"><span class="tag">Markdown</span><span class="tag">写作</span></div>
+      </header>
+      <div class="prose">
+<p>这份速查有两个作用：给我自己备忘，同时充当渲染器的回归测试。每次改 <code>build.mjs</code>，我都会翻到这页看一遍有没有渲染坏掉的地方。</p>
+<p>渲染器的能力边界很明确：<strong>只支持我实际会写的语法</strong>，不追求完整的 CommonMark。</p>
+<p><img src="../assets/img/build-flow.svg" alt="构建流程示意" loading="lazy"></p>
+<h2>标题</h2>
+<p>一到六级标题，<code>#</code> 后面必须有空格。文章标题由 front matter 的 <code>title</code> 提供，正文里从二级标题开始用比较合适。</p>
+<h2>强调</h2>
+<ul>
+<li><code>**粗体**</code> → <strong>粗体</strong></li>
+<li><code>*斜体*</code> → <em>斜体</em></li>
+<li><code>~~删除线~~</code> → <del>删除线</del></li>
+<li><code>`行内代码`</code> → <code>行内代码</code></li>
+<li>组合：<strong>粗体里嵌 <code>代码</code></strong> 没问题</li>
+</ul>
+<h2>列表</h2>
+<p>无序列表，支持嵌套：</p>
+<ul>
+<li>第一层项目</li>
+<li><p>另一个第一层项目</p>
+<ul>
+<li>嵌套的子项</li>
+<li>再一个子项</li>
+</ul></li>
+<li>回到第一层</li>
+</ul>
+<p>有序列表：</p>
+<ol>
+<li>第一步：写 Markdown</li>
+<li><p>第二步：运行构建</p>
+<ol>
+<li>脚本渲染正文</li>
+<li>脚本更新首页列表</li>
+</ol></li>
+<li>第三步：提交推送</li>
+</ol>
+<h2>代码块</h2>
+<p>围栏代码块用三个反引号，可以标注语言：</p>
+<pre><code class="language-bash"># 构建一次
+node scripts/build.mjs
+
+# 本地预览静态站点
+python3 -m http.server 8000</code></pre>
+<pre><code class="language-js">// 行内代码里的星号 * 不会被当成斜体
+const re = /^\s*(```|~~~)\s*([\w+#.-]*)\s*$/;</code></pre>
+<p>不带语言标注也可以，就是没有语法高亮 class。</p>
+<h2>引用</h2>
+<blockquote>
+<p>引用块可以嵌套渲染，里面照样能放 <strong>粗体</strong>、<code>代码</code> 和<a href="#标题">链接</a>。</p>
+<p>多个段落也没问题。</p>
+</blockquote>
+<h2>表格</h2>
+<table>
+<thead>
+<tr><th style="text-align:left">左对齐</th><th style="text-align:center">居中</th><th style="text-align:right">右对齐</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left"><code>:---</code></td><td style="text-align:center"><code>:---:</code></td><td style="text-align:right"><code>---:</code></td></tr>
+<tr><td style="text-align:left">内容</td><td style="text-align:center">内容</td><td style="text-align:right">1234</td></tr>
+<tr><td style="text-align:left">长一点的内容</td><td style="text-align:center">中</td><td style="text-align:right">5678</td></tr>
+</tbody>
+</table>
+<h2>分隔线</h2>
+<p>三个或更多 <code>-</code>、<code>*</code>、<code>_</code>：</p>
+<hr>
+<h2>链接与图片</h2>
+<ul>
+<li>行内链接：<a href="https://github.com/Muxi0808">GitHub</a></li>
+<li>带标题的链接：<a href="https://example.com" title="鼠标悬停显示">示例站点</a></li>
+<li>自动链接：<a href="https://example.com" rel="noopener">https://example.com</a></li>
+<li>图片：<code>![替代文字](路径)</code>，上面的流程图就是这么插进来的</li>
+</ul>
+<h2>换行</h2>
+<p>段落内直接换行会被当作<strong>软换行</strong>：中文之间直接拼接，不会多出空格；英文之间补一个空格。</p>
+<p>如果想强制换行，在行尾加<strong>两个空格</strong>：</p>
+<p>这一行结尾有两个空格，<br>
+所以这里断开了。</p>
+<h2>不支持的部分</h2>
+<p>有意没做的，免得哪天自己踩坑：</p>
+<ul>
+<li><strong>原始 HTML</strong> —— 会被转义成文本显示，这是故意的安全设计</li>
+<li><strong>脚注</strong>、<strong>定义列表</strong>、<strong>任务列表</strong> —— 用不到</li>
+<li><strong>数学公式</strong> —— 需要的话我会贴图片</li>
+<li><strong>Setext 标题</strong>（用 <code>===</code> 或 <code>---</code> 划线）—— 后者会和分隔线、front matter 打架，一律用 <code>#</code></li>
+</ul>
+<p>需要新语法时，先问一句「我一个月会用几次」，答案小于三就不加。</p>
+      </div>
+    </article>
+    <div class="post-footer">
+      <a href="../index.html">← 返回首页</a>
+      <span><a href="build-a-static-blog.html">← 用 200 行脚本搭一个不要框架的静态博客</a></span>
+    </div>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Muxi0808</span>
+    <span>用 Markdown 写作 · 静态托管于 GitHub Pages</span>
+  </div>
+</footer>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

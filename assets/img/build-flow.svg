@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" width="640" height="260" role="img" aria-label="构建流程示意图：Markdown 源文件经过构建脚本输出静态 HTML 与 RSS">
+  <defs>
+    <style>
+      .box { fill: #f7f8fa; stroke: #d7dbe0; stroke-width: 1.5; rx: 10; }
+      .lbl { font: 500 14px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1a1d21; }
+      .sub { font: 400 11.5px ui-monospace, Menlo, Consolas, monospace; fill: #6b7280; }
+      .arrow { stroke: #2563eb; stroke-width: 2; fill: none; marker-end: url(#head); }
+      .note { font: 400 12px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #6b7280; }
+    </style>
+    <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <rect class="box" x="24" y="86" width="150" height="84"/>
+  <text class="lbl" x="99" y="118" text-anchor="middle">Markdown 原文</text>
+  <text class="sub" x="99" y="140" text-anchor="middle">content/posts/*.md</text>
+
+  <rect class="box" x="245" y="86" width="150" height="84"/>
+  <text class="lbl" x="320" y="118" text-anchor="middle">构建脚本</text>
+  <text class="sub" x="320" y="140" text-anchor="middle">build.mjs</text>
+
+  <rect class="box" x="466" y="40" width="150" height="72"/>
+  <text class="lbl" x="541" y="70" text-anchor="middle">静态 HTML</text>
+  <text class="sub" x="541" y="92" text-anchor="middle">posts/*.html</text>
+
+  <rect class="box" x="466" y="146" width="150" height="72"/>
+  <text class="lbl" x="541" y="176" text-anchor="middle">RSS 订阅</text>
+  <text class="sub" x="541" y="198" text-anchor="middle">feed.xml</text>
+
+  <path class="arrow" d="M 176 128 L 239 128"/>
+  <path class="arrow" d="M 397 116 C 430 116 435 76 460 76"/>
+  <path class="arrow" d="M 397 140 C 430 140 435 182 460 182"/>
+
+  <text class="note" x="320" y="228" text-anchor="middle">零依赖 · 产物为纯静态文件，可直接托管</text>
+</svg>

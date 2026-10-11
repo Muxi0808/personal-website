@@ -1,0 +1,17 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "极简静态博客：Markdown 写作，零依赖构建，托管于 GitHub Pages",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "serve": "node scripts/serve.mjs",
+    "new": "node scripts/new-post.mjs"
+  }
+}

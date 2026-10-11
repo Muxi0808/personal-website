@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muxi0808 的博客 · Muxi0808</title>
+<meta name="description" content="记录开发、阅读与折腾的极简博客。">
+<meta name="author" content="Muxi0808">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Muxi0808 的博客 · Muxi0808">
+<meta property="og:description" content="记录开发、阅读与折腾的极简博客。">
+<meta property="og:site_name" content="Muxi0808 的博客">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Muxi0808 的博客" href="feed.xml">
+<script>
+/* 在样式生效前定好主题，避免深色模式刷新时白屏闪烁 */
+(function () {
+  try {
+    var saved = localStorage.getItem("muxi-theme");
+    var dark = saved
+      ? saved === "dark"
+      : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (dark) document.documentElement.setAttribute("data-theme", "dark");
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="brand-mark">M</span><span>Muxi0808</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="index.html" aria-current="page">首页</a>
+      <a href="about.html">关于</a>
+      <a href="feed.xml">RSS</a>
+      <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+    <section class="intro">
+      <h1>你好，我是 Muxi0808 👋</h1>
+      <p>这里记录我在开发、阅读和日常折腾里的所得。不求写得多，只求每篇都对自己有用。</p>
+    </section>
+
+    <h2 class="section-title">全部文章</h2>
+
+    <!-- POSTS:START -->
+<ul class="post-list">
+  <li>
+    <time datetime="2026-10-10T00:00:00+08:00">2026-10-10</time>
+    <a class="post-link" href="posts/hello-world.html">你好，世界</a>
+    <p class="post-summary">这个博客的第一篇文章：为什么我要在 2026 年重新写博客，以及打算在这里放些什么。</p>
+    <div class="tags"><span class="tag">随笔</span><span class="tag">博客</span></div>
+  </li>
+  <li>
+    <time datetime="2026-10-06T00:00:00+08:00">2026-10-06</time>
+    <a class="post-link" href="posts/build-a-static-blog.html">用 200 行脚本搭一个不要框架的静态博客</a>
+    <p class="post-summary">不用 Jekyll、不用 Hexo、不装 npm 依赖。一个 Node 脚本把 Markdown 变成纯静态 HTML，托管到 GitHub Pages 就完事。</p>
+    <div class="tags"><span class="tag">Node.js</span><span class="tag">静态站点</span><span class="tag">工程实践</span></div>
+  </li>
+  <li>
+    <time datetime="2026-09-28T00:00:00+08:00">2026-09-28</time>
+    <a class="post-link" href="posts/markdown-writing-guide.html">这个博客支持的 Markdown 写法</a>
+    <p class="post-summary">一份写给自己看的语法速查——渲染器只支持这些，但每一条都验证过。顺便当成渲染回归测试用。</p>
+    <div class="tags"><span class="tag">Markdown</span><span class="tag">写作</span></div>
+  </li>
+</ul>
+<!-- POSTS:END -->
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Muxi0808</span>
+    <span>用 Markdown 写作 · 静态托管于 GitHub Pages</span>
+  </div>
+</footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
